@@ -14,5 +14,17 @@ class DatabaseProvider {}
 // DatabaseProvider utilizará para salvar no banco de dados as informações que forem
 //cadastradas, editadas ou removidas pelo usuário
 class Contact {
+  int id;
+  String name;
+  String email;
+  String phone;
 
+  Contact();
+  // Construtor que converte os dados de mapa (JSON) para objeto do contato
+  Contact.fromMap(Map map) {
+    id = map[idColun];
+    name = map[nameColumn];
+    email = map[emailColumn];
+    phone = map[phoneColumn];
+  }
 }
