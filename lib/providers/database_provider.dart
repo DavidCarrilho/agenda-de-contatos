@@ -1,6 +1,11 @@
+import 'package:sqflite/sqflite.dart';
+import 'dart:async';
+import 'package:path/path.dart';
+
 // Nome dos campos na tabela do banco de dados, por isso são constantes
+
 final String contactTable = "contactTable";
-final String idColun = "idColumn";
+final String idColumn = "idColumn";
 final String nameColumn = "nameColumn";
 final String emailColumn = "emailColumn";
 final String phoneColumn = "phoneColumn";
@@ -8,7 +13,35 @@ final String phoneColumn = "phoneColumn";
 ///A classe DatabaseProvider cuidará especificamente
 // das operações diretas ao banco de dados (criar, editar, remover,
 // abrir e fechar conexão)
-class DatabaseProvider {}
+class DatabaseProvider {
+  // construtor Singleton
+  static final DatabaseProvider _instance = DatabaseProvider.internal();
+  factory DatabaseProvider() => _instance;
+  DatabaseProvider.internal();
+  Database _db;
+
+  Future<Database> get db async {
+    if (_db != null) {
+      return _db;
+    } else {
+      _db = await initDB();
+      return _db;
+    }
+  }
+
+  Future<Database> initDB() async {
+    final databasePath = await getDatabasesPath();
+    final path = join(databasePath, "contactsnew.db");
+
+    return await openDatabase(path, version: 1, onCreate: (
+      Database db,
+      int newerVersion,
+    ) async {
+      await db.execute(
+          "CREATE TABLE $contactTable($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn TEXT,$phoneColumn TEXT)");
+    });
+  }
+}
 
 // Contact focará em representar a estrutura de dados do contato, estrutura tal que a
 // DatabaseProvider utilizará para salvar no banco de dados as informações que forem
@@ -22,7 +55,7 @@ class Contact {
   Contact();
   // Construtor que converte os dados de mapa (JSON) para objeto do contato
   Contact.fromMap(Map map) {
-    id = map[idColun];
+    id = map[idColumn];
     name = map[nameColumn];
     email = map[emailColumn];
     phone = map[phoneColumn];
@@ -39,7 +72,7 @@ class Contact {
 // O id pode ser nulo caso o registro esteja sendo criado já que é o banco de dados que
 // atribui o ID ao registro no ato de salvar. Por isso de vemos testar antes de atribuir
     if (id != null) {
-      map[idColun] = id;
+      map[idColumn] = id;
     }
     return map;
   }
