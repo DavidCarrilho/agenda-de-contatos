@@ -27,4 +27,20 @@ class Contact {
     email = map[emailColumn];
     phone = map[phoneColumn];
   }
+
+// Método que transforma o objeto do contato em Mapa (JSON) para armazenar no banco de dados
+  Map toMap() {
+    Map<String, dynamic> map = {
+      nameColumn: name,
+      emailColumn: email,
+      phoneColumn: phone,
+    };
+
+// O id pode ser nulo caso o registro esteja sendo criado já que é o banco de dados que
+// atribui o ID ao registro no ato de salvar. Por isso de vemos testar antes de atribuir
+    if (id != null) {
+      map[idColun] = id;
+    }
+    return map;
+  }
 }
