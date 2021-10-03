@@ -15,6 +15,7 @@ class _ContactPageState extends State<ContactPage> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _nameFocus = FocusNode();
+  bool _userEdited = false;
   Contact _editedContact;
 
   @override
