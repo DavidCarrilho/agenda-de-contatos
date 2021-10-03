@@ -1,4 +1,5 @@
 import 'package:app_contact_book/model/model.dart';
+import 'package:app_contact_book/pages/pages.dart';
 import 'package:app_contact_book/providers/providers.dart';
 import 'package:flutter/material.dart';
 
@@ -137,4 +138,23 @@ class _HomePageState extends State<HomePage> {
           onPressed: pressedFunction,
         ),
       );
+
+  void _showContactPage({Contact contact}) async {
+    final recContact = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ContactPage(
+          contact: contact,
+        ),
+      ),
+    );
+    if (recContact != null) {
+      if (contact != null) {
+        await database.updateContact(recContact);
+      } else {
+        await database.saveContact(recContact);
+      }
+      _getAllContacts();
+    }
+  }
 }
