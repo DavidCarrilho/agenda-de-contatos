@@ -37,11 +37,43 @@ class _HomePageState extends State<HomePage> {
         child: Icon(Icons.add),
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(10.0),
-        itemCount: contacts.length,
-        itemBuilder: (context, index) {
-        return _contactCard(context, index);
-      }),
+          padding: EdgeInsets.all(10.0),
+          itemCount: contacts.length,
+          itemBuilder: (context, index) {
+            return _contactCard(context, index);
+          }),
     );
   }
+
+  Widget _contactCard(BuildContext context, int index) => GestureDetector(
+        child: Card(
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Container(
+                  height: 80.0,
+                  width: 80.0,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/person.png'),
+                          fit: BoxFit.cover)),
+                ),
+                Padding(padding: EdgeInsets.only(left: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(contacts[index].name ?? "", style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),),
+                      Text(contacts[index].email ?? "", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),),
+                      Text(contacts[index].phone ?? "", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        onTap: () => _showOptions(context, index),
+      );
 }
