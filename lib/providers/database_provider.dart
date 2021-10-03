@@ -69,6 +69,15 @@ class DatabaseProvider {
       return null;
     }
   }
+
+  // Este método será utilizado quando o usuário acionar o botão excluir presente no menu
+  // que abrirá ao selecionar um contato na lista de3e contatos cadastrados
+  // deleteContact(int;s
+  Future<int> deleteContact(int id) async {
+    Database dbContact = await db;
+    return await dbContact
+        .delete(contactTable, where: "$idColumn = ?", whereArgs: [id]);
+  }
 }
 
 // Contact focará em representar a estrutura de dados do contato, estrutura tal que a
