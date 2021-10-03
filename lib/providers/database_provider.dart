@@ -53,6 +53,22 @@ class DatabaseProvider {
     contact.id = await dbContact.insert(contactTable, contact.toMap());
     return contact;
   }
+
+// método que recebe como parâmetro o id do contato e realiza a query no banco de
+// dados solicitando todos os campos com informação daquele usuário cujo id estamos filtrando
+  Future<Contact> getContact(int id) async {
+    Database dbContact = await db;
+    List<Map> maps = await dbContact.query(contactTable,
+        columns: [idColumn, emailColumn, phoneColumn],
+        where: "$idColumn = ?",
+        whereArgs: [id]);
+
+    if (maps.length > 0) {
+      return Contact.fromMap(maps.first);
+    } else {
+      return null;
+    }
+  }
 }
 
 // Contact focará em representar a estrutura de dados do contato, estrutura tal que a
