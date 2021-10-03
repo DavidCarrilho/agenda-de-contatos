@@ -33,13 +33,25 @@ class DatabaseProvider {
     final databasePath = await getDatabasesPath();
     final path = join(databasePath, "contactsnew.db");
 
-    return await openDatabase(path, version: 1, onCreate: (
-      Database db,
-      int newerVersion,
-    ) async {
-      await db.execute(
-          "CREATE TABLE $contactTable($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn TEXT,$phoneColumn TEXT)");
-    });
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (
+        Database db,
+        int newerVersion,
+      ) async {
+        await db.execute(
+            "CREATE TABLE $contactTable($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn TEXT,$phoneColumn TEXT)");
+      },
+    );
+  }
+
+// saveContact cria uma "cópia" para si do objeto db e executa uma operação de inserção passando como
+// parâmetros a tabela que deve receber os dados e os dados propriamente ditos tratados pelo método toMap()
+  Future<Contact> saveContact(Contact contact) async {
+    Database dbContact = await db;
+    contact.id = await dbContact.insert(contactTable, contact.toMap());
+    return contact;
   }
 }
 
