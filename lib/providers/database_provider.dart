@@ -86,6 +86,18 @@ class DatabaseProvider {
     return await dbContact.update(contactTable, contact.toMap(),
         where: "$idColumn = ?", whereArgs: [contact.id]);
   }
+
+  // Este método realizará a seleção de todos os contatos que estão presentes na tabela e retornará uma
+  // lista com cada registro formatado para o formato de objeto da classe Contact
+  Future<List> getAllContacts() async {
+    Database dbContact = await db;
+    List listMap = await dbContact.rawQuery("SELECT * FROM $contactTable");
+    List<Contact> listContact = List();
+    for (Map m in listMap) {
+      listContact.add(Contact.fromMap(m));
+    }
+    return listContact;
+  }
 }
 
 // Contact focará em representar a estrutura de dados do contato, estrutura tal que a
