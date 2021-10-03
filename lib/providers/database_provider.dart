@@ -78,6 +78,14 @@ class DatabaseProvider {
     return await dbContact
         .delete(contactTable, where: "$idColumn = ?", whereArgs: [id]);
   }
+
+  // Para atualizar um contato, passaremos como parâmetro para o nosso método
+  // um objeto do tipo Contact com os dados do contato que queremos atualizar
+  Future<int> updateContact(Contact contact) async {
+    Database dbContact = await db;
+    return await dbContact.update(contactTable, contact.toMap(),
+        where: "$idColumn = ?", whereArgs: [contact.id]);
+  }
 }
 
 // Contact focará em representar a estrutura de dados do contato, estrutura tal que a
