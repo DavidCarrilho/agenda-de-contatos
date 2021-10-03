@@ -60,13 +60,26 @@ class _HomePageState extends State<HomePage> {
                           image: AssetImage('assets/images/person.png'),
                           fit: BoxFit.cover)),
                 ),
-                Padding(padding: EdgeInsets.only(left: 10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(contacts[index].name ?? "", style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),),
-                      Text(contacts[index].email ?? "", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),),
-                      Text(contacts[index].phone ?? "", style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),),
+                      Text(
+                        contacts[index].name ?? "",
+                        style: TextStyle(
+                            fontSize: 22.0, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        contacts[index].email ?? "",
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        contacts[index].phone ?? "",
+                        style: TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold),
+                      ),
                     ],
                   ),
                 )
@@ -75,5 +88,53 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         onTap: () => _showOptions(context, index),
+      );
+
+  _showOptions(BuildContext context, int index) => showModalBottomSheet(
+        context: context,
+        builder: (context) => BottomSheet(
+          onClosing: () {},
+          builder: (context) => Container(
+            padding: EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _optionButton(
+                  context,
+                  'Editar',
+                  () {
+                    Navigator.pop(context);
+                    _showContactPage(contact: contacts[index]);
+                  },
+                ),
+                _optionButton(
+                  context,
+                  'Excluir',
+                  () {
+                    database.deleteContact((contacts[index].id));
+                    setState(() {
+                      contacts.removeAt(index);
+                      Navigator.pop(context);
+                    });
+                  },
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+
+  _optionButton(BuildContext context, title, pressedFunction()) => Padding(
+        padding: EdgeInsets.all(10.0),
+        child: FlatButton(
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 20.0,
+            ),
+          ),
+          onPressed: pressedFunction,
+        ),
       );
 }
